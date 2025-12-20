@@ -1,25 +1,19 @@
 import fs from "node:fs";
 
 export function solve(input: string[]) {
-    const grid = Grid.fromTextInput(input);
-
     const accessiblePapers = new Set();
-    for (let x = 0; x < grid.width; x++) {
-        for (let y = 0; y < grid.height; y++) {
-            const cell = grid.get(x, y);
-            // console.log(x, y);
-            if (cell?.value === "@") {
-                const neighbours = grid.getNeighboursFor(x, y);
-                const numberOfAdjacentPaperRolls = neighbours.filter((n) =>
-                    n.value === "@"
-                ).length;
-                if (numberOfAdjacentPaperRolls < 4) {
-                    accessiblePapers.add(cell.toString());
-                    // console.log(`adding ${x}, ${y}`);
-                }
+    const grid = Grid.fromTextInput(input);
+    grid.iterate((cell, x, y) => {
+        if (cell?.value === "@") {
+            const numberOfAdjacentPaperRolls = grid
+                .getNeighboursFor(x, y)
+                .filter((n) => n.value === "@").length;
+            if (numberOfAdjacentPaperRolls < 4) {
+                accessiblePapers.add(cell.toString());
+                // console.log(`adding ${x}, ${y}`);
             }
         }
-    }
+    });
 
     return accessiblePapers.size;
 }
@@ -90,6 +84,16 @@ export class Grid {
         ];
 
         return maybeNeighbours.filter((n) => n !== undefined);
+    }
+
+    iterate(callback: (c: Cell, x: number, y: number) => void) {
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                const cell = this.get(x, y);
+                if (!cell) throw new Error();
+                callback(cell, cell.x, cell.y)
+            }
+        }
     }
 
     toString() {

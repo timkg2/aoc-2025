@@ -1,5 +1,5 @@
 /// <reference lib="deno.ns" />
-import { solve, getInput, Grid } from './index';
+import { solve, getInput, Grid } from './index.ts';
 import assert from 'node:assert';
 
 Deno.test('day 4 - test input', () => {

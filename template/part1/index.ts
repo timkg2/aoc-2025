@@ -5,7 +5,7 @@ export function solve(input: unknown) {
 }
 
 export function getInput(filename: string) {
-    const fileContents = fs.readFileSync(`./${filename}`, { encoding: 'utf8' });
+    const fileContents = fs.readFileSync(filename, { encoding: 'utf8' });
     
     return fileContents;
 }

@@ -1,21 +1,16 @@
-import { solve, getInput } from './index.ts';
-import assert from 'node:assert';
+/// <reference lib="deno.ns" />
+import { getInput, solve } from "./index.ts";
+import assert from "node:assert";
 
-
-Deno.test('day x, part 2 - get input', () => {
-    const input = getInput('./test-input.txt')
-    const expected = {}
-    assert.deepStrictEqual(input, expected)
-})
-
-Deno.test('day x, part 2 - solve test input', () => {
-    const input = getInput('./test-input.ts')
+Deno.test("day 7, part 2 - solve test input", () => {
+    const input = getInput("./test-input.txt");
     const res = solve(input);
-    assert.equal(res, 0)
-})
+    assert.equal(res, 40);
+});
 
-Deno.test('day x, part 2 - solve puzzle input', () => {
-    const input = getInput('../puzzle-input.ts')
+Deno.test('day 7, part 2 - solve puzzle input', () => {
+    const input = getInput('../puzzle-input.txt')
     const res = solve(input);
-    assert.equal(res, 0)
+    // console.log('max', Number.MAX_SAFE_INTEGER)
+    assert.equal(res, 95408386769474)
 })

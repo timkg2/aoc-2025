@@ -37,5 +37,5 @@ Deno.test("day 7, part 1 - solve test input", () => {
 Deno.test('day 7, part 1 - solve puzzle input', () => {
     const input = getInput('../puzzle-input.txt')
     const res = solve(input);
-    assert.equal(res, 0)
+    assert.equal(res, 1698)
 })

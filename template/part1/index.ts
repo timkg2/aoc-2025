@@ -1,10 +1,12 @@
 import fs from 'node:fs';
 
-export function solve(input: unknown) {
+type IPuzzleInput = unknown;
+
+export function solve(input: IPuzzleInput) {
     return 0;
 }
 
-export function getInput(filename: string) {
+export function getInput(filename: string): IPuzzleInput {
     const fileContents = fs.readFileSync(filename, { encoding: 'utf8' });
     
     return fileContents;

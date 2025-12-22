@@ -12,9 +12,7 @@
 // root.children[6] = start: [0,MAX/2,MAX/2], size: MAX/2
 // root.children[7] = start: [MAX/2,MAX/2,MAX/2], size: MAX/2
 
-import { runInThisContext } from "node:vm";
-
-type IPoint = {
+export type IPoint = {
     x: number,
     y: number,
     z: number,

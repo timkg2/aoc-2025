@@ -47,9 +47,9 @@ export function getInput(filename: string): IPuzzleInput {
     xs.sort((a,b) => a - b)
     ys.sort((a,b) => a - b)
     zs.sort((a,b) => a - b)
-    console.log('x', xs)
-    console.log('y', ys)
-    console.log('z', zs)
+    console.log('x', xs[xs.length-1])
+    console.log('y', ys[ys.length-1])
+    console.log('z', zs[zs.length-1])
 
     return input;
 }

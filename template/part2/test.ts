@@ -1,6 +1,6 @@
+/// <reference lib="deno.ns" />
 import { solve, getInput } from './index.ts';
 import assert from 'node:assert';
-
 
 Deno.test('day x, part 2 - get input', () => {
     const input = getInput('./test-input.txt')
@@ -9,13 +9,13 @@ Deno.test('day x, part 2 - get input', () => {
 })
 
 Deno.test('day x, part 2 - solve test input', () => {
-    const input = getInput('./test-input.ts')
+    const input = getInput('./test-input.txt')
     const res = solve(input);
     assert.equal(res, 0)
 })
 
 Deno.test('day x, part 2 - solve puzzle input', () => {
-    const input = getInput('../puzzle-input.ts')
+    const input = getInput('../puzzle-input.txt')
     const res = solve(input);
     assert.equal(res, 0)
 })

@@ -1,3 +1,4 @@
+/// <reference lib="deno.ns" />
 import { solve, getInput } from './index.ts';
 import assert from 'node:assert';
 

@@ -12,29 +12,7 @@
 // root.children[6] = start: [0,MAX/2,MAX/2], size: MAX/2
 // root.children[7] = start: [MAX/2,MAX/2,MAX/2], size: MAX/2
 
-export type IPoint = {
-    x: number,
-    y: number,
-    z: number,
-}
-
-export class Point implements IPoint {
-    x: number;
-    y: number;
-    z: number;
-
-    constructor(p: number[] | IPoint) { 
-        if (Array.isArray(p)) {
-            this.x = p[0]!;
-            this.y = p[1]!;
-            this.z = p[2]!;
-        } else {
-            this.x = p.x;
-            this.y = p.y;
-            this.z = p.z;
-        }
-    }
-}
+import type { IPoint } from "./point.ts";
 
 const MAX_OBJECTS = 10;
 

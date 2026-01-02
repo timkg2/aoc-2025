@@ -1,7 +1,9 @@
 /// <reference lib="deno.ns" />
-import { getDistance, getInput, solve } from "./index.ts";
+import { getDistance, getInput, } from "./index.ts";
 import assert from "node:assert";
-import { type IPoint, Octree, Point } from "./tree.ts";
+import { Octree } from "./tree.ts";
+import type { IPoint } from "./point.ts";
+import { Point } from "./point.ts";
 
 Deno.test("getDistance", () => {
     const d1 = getDistance({ x: 1, y: 1, z: 1 }, { x: 2, y: 1, z: 1 });

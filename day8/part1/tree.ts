@@ -38,6 +38,8 @@ export class Point implements IPoint {
 
 const MAX_OBJECTS = 10;
 
+
+// maybe not necessary, one-off problem...
 export class Octree<Obj extends IPoint> {
     origin: IPoint;
     size: number;

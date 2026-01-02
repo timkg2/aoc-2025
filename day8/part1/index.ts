@@ -1,55 +1,97 @@
-import fs from 'node:fs';
-
-type IPos = { x: number, y: number, z: number }
+import fs from "node:fs";
+import { Circuit, type IVec3, JunctionBox } from "./src.ts";
 
 type IPuzzleInput = {
-    boxes: IPos[]
+    junctionBoxes: JunctionBox[];
 };
 
-export function solve(input: IPuzzleInput) {
-    // naive testing
-    const ds = input.boxes.slice(1).map(b => {
-        return {
-            distance: getDistance(input.boxes[0]!, b),
-            to: `[${b.x},${b.y},${b.z}]`
+type IPair = {
+    a: JunctionBox;
+    b: JunctionBox;
+    distance: number;
+};
+
+export function connectCircuits(
+    sortedPairs: IPair[],
+    numberOfConnections: number,
+) {
+    const circuits: Set<Circuit> = new Set();
+    let connectionsMade = 0;
+    for (let i = 0; i < sortedPairs.length; i++) {
+        const { a, b } = sortedPairs[i]!;
+
+        const c = a.connect(b);
+        circuits.add(c!);
+        connectionsMade += 1;
+
+        if (connectionsMade >= numberOfConnections) {
+            break;
         }
-    });
-    return ds
+    }
+
+    return circuits;
 }
 
-export function getDistance(pos1: IPos, pos2: IPos) {
+export function getSortedPairs(input: IPuzzleInput) {
+    const pairs: Set<IPair> = new Set();
+    // keep track of added pairs to prevent duplicates
+    const added: Set<string> = new Set();
+
+    for (const a of input.junctionBoxes) {
+        // n^2
+        for (const b of input.junctionBoxes) {
+            if (a === b) {
+                continue;
+            }
+
+            const pairString = a.x < b.x ? `${a}-${b}` : `${b}-${a}`;
+
+            if (added.has(pairString)) {
+                // console.log(`skipping duplicated ${pairString}`)
+            } else {
+                const d = getDistance(a, b);
+                pairs.add({ a: a, b: b, distance: d });
+                added.add(pairString);
+            }
+        }
+    }
+
+    const sortedPairs = Array.from(pairs).sort((a, b) =>
+        a.distance - b.distance
+    );
+
+    return sortedPairs;
+}
+
+export function solve(input: IPuzzleInput, n = 10) {
+    const sortedPairs = getSortedPairs(input);
+    // console.log(sortedPairs)
+    const circuits = connectCircuits(sortedPairs, n);
+    const sortedCircuits = Array.from(circuits).filter(a => !a.STALE).sort((a, b) => b.size() - a.size())
+    // console.log(circuits)
+    return sortedCircuits[0]!.size() * sortedCircuits[1]!.size() * sortedCircuits[2]!.size();
+}
+
+export function getDistance(pos1: IVec3, pos2: IVec3) {
     return Math.sqrt(
-        Math.pow((pos2.x - pos1.x), 2)
-        + Math.pow((pos2.y - pos1.y), 2)
-        + Math.pow((pos2.z - pos1.z), 2)
-    )
+        Math.pow(pos2.x - pos1.x, 2) +
+            Math.pow(pos2.y - pos1.y, 2) +
+            Math.pow(pos2.z - pos1.z, 2),
+    );
 }
 
 export function getInput(filename: string): IPuzzleInput {
-    const fileContents = fs.readFileSync(filename, { encoding: 'utf8' });
-    const lines = fileContents.split('\n');
+    const fileContents = fs.readFileSync(filename, { encoding: "utf8" });
+    const lines = fileContents.split("\n");
     const input: IPuzzleInput = {
-        boxes: lines.map(line => {
-            const parts = line.split(',').map(p => p.trim()).map(p => parseInt(p, 10));
+        junctionBoxes: lines.map((line) => {
+            const parts = line.split(",").map((p) => p.trim()).map((p) =>
+                parseInt(p, 10)
+            );
             if (parts.length !== 3) throw new Error();
-            return { x: parts[0]!, y: parts[1]!, z: parts[2]! }
-        })
-    }
-    
-    const xs: number[] = [];
-    const ys: number[] = [];
-    const zs: number[] = [];
-    input.boxes.forEach(b => {
-        xs.push(b.x)
-        ys.push(b.y)
-        zs.push(b.z)
-    })
-    xs.sort((a,b) => a - b)
-    ys.sort((a,b) => a - b)
-    zs.sort((a,b) => a - b)
-    console.log('x', xs[xs.length-1])
-    console.log('y', ys[ys.length-1])
-    console.log('z', zs[zs.length-1])
+            return new JunctionBox(parts);
+        }),
+    };
 
     return input;
 }

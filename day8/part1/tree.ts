@@ -12,14 +12,14 @@
 // root.children[6] = start: [0,MAX/2,MAX/2], size: MAX/2
 // root.children[7] = start: [MAX/2,MAX/2,MAX/2], size: MAX/2
 
-import type { IPoint } from "./point.ts";
+import type { IVec3 } from "./src.ts";
 
 const MAX_OBJECTS = 10;
 
 
-// maybe not necessary, one-off problem...
-export class Octree<Obj extends IPoint> {
-    origin: IPoint;
+// maybe not necessary after all, one-off problem...
+export class Octree<Obj extends IVec3> {
+    origin: IVec3;
     size: number;
 
     childNodes: (Octree<Obj>|undefined)[];
@@ -28,7 +28,7 @@ export class Octree<Obj extends IPoint> {
     isPartitioned: boolean;
 
     constructor(
-        origin: IPoint,
+        origin: IVec3,
         size: number,
         objects: Obj[] = []
     ) {
@@ -52,7 +52,7 @@ export class Octree<Obj extends IPoint> {
         // TODO handle partitioning
     }
 
-    getChildNodeFor(p: IPoint) {
+    getChildNodeFor(p: IVec3) {
         if (!this.isInBounds(p)) throw new Error();
         if (!this.isPartitioned) throw new Error();
         
@@ -86,7 +86,7 @@ export class Octree<Obj extends IPoint> {
         }
     }
 
-    isInBounds(p: IPoint) {
+    isInBounds(p: IVec3) {
         const {x, y, z} = p;
         
         // inclusive/exclusive edge?

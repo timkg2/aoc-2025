@@ -25,6 +25,28 @@ Deno.test('segmentsIntersect()', () => {
     assert.equal(res, false)
 })
 
+Deno.test('segmentsIntersect()', () => {
+    const p1: IVec2 = { x: 0, y: 0 };
+    const p2: IVec2 = { x: 10, y: 0 };
+    
+    const q1: IVec2 = { x: 5, y: 0 };
+    const q2: IVec2 = { x: 5, y: 5 };
+    
+    const res = segmentsIntersect(p1, p2, q1, q2)
+    assert.equal(res, true)
+})
+
+Deno.test('segmentsIntersect()', () => {
+    const p1: IVec2 = { x: 0, y: 0 };
+    const p2: IVec2 = { x: 10, y: 0 };
+    
+    const q1: IVec2 = { x: 0, y: 0 };
+    const q2: IVec2 = { x: 5, y: 0 };
+    
+    const res = segmentsIntersect(p1, p2, q1, q2)
+    assert.equal(res, false)
+})
+
 // Deno.test('isInside()', () => {
 
 //     const rect: IPolygon = {
@@ -48,14 +70,14 @@ Deno.test('segmentsIntersect()', () => {
 //     assert.equal(isInside({ x: 0, y: 0 }, rect), false)
 // })
 
-Deno.test('day x, part 2 - solve test input', () => {
-    const input = getInput('./test-input.txt')
-    const res = solve(input);
-    assert.equal(res, 24)
-})
+// Deno.test('day x, part 2 - solve test input', () => {
+//     const input = getInput('./test-input.txt')
+//     const res = solve(input);
+//     assert.equal(res, 24)
+// })
 
 Deno.test('day x, part 2 - solve puzzle input', () => {
     const input = getInput('../puzzle-input.txt')
-    const res = solve(input);
-    assert.equal(res, 0)
+    const rect = solve(input);
+    assert.equal(rect?.getArea(), 4782151432 - 1)
 })

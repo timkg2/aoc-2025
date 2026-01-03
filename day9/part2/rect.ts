@@ -1,5 +1,5 @@
-import type { IPolygon, IVec2 } from "./index.ts";
-import { isInside, segmentIsInsidePolygon } from "./intersection.ts";
+import { Vec2, type IPolygon, type IVec2, type Polygon } from "./index.ts";
+import { segmentIsInsidePolygon } from "./intersection.ts";
 
 export class Rectangle implements IPolygon {
 
@@ -32,24 +32,24 @@ export class Rectangle implements IPolygon {
             // a is top row
             if (a.x <= b.x) {
                 // a is top left, b is bottom right
-                return new Rectangle(a, {x: b.x, y: a.y}, b, {x: a.x, y: b.y})
+                return new Rectangle(a, Vec2.from({x: b.x, y: a.y}), b, Vec2.from({x: a.x, y: b.y}))
             } else {
                 // a is top right, b is bottom left
-                return new Rectangle({x: b.x, y: a.y}, a, {x: a.x, y: b.y}, b)
+                return new Rectangle(Vec2.from({x: b.x, y: a.y}), a, Vec2.from({x: a.x, y: b.y}), b)
             }
         } else {
             // b is top row
             if (a.x <= b.x) {
                 // a is bottom left, b is top right
-                return new Rectangle({x: a.x, y: b.y}, b, {x: b.x, y: a.y}, a);
+                return new Rectangle(Vec2.from({x: a.x, y: b.y}), b, Vec2.from({x: b.x, y: a.y}), a);
             } else {
                 // a is bottom right, b is top left
-                return new Rectangle(b, {x: a.x, y: b.y}, a, {x: b.x, y: a.y })
+                return new Rectangle(b, Vec2.from({x: a.x, y: b.y}), a, Vec2.from({x: b.x, y: a.y }))
             }
         }
     }
 
-    isInside(polygon: IPolygon) {
+    isInside(polygon: Polygon) {
         return segmentIsInsidePolygon(this.topLeft, this.topRight, polygon)
             && segmentIsInsidePolygon(this.topRight, this.bottomRight, polygon)
             && segmentIsInsidePolygon(this.bottomRight, this.bottomLeft, polygon)

@@ -20,14 +20,32 @@ export function segmentsIntersect(
     q1: IVec2,
     q2: IVec2,
 ): boolean {
-    const orientationP1 = orientation(q1, q2, p1);
-    const orientationP2 = orientation(q1, q2, p2);
-    const orientationQ1 = orientation(p1, p2, q1);
-    const orientationQ2 = orientation(p1, p2, q2);
+    const orientations = [
+        orientation(q1, q2, p1),
+        orientation(q1, q2, p2),
+        orientation(p1, p2, q1),
+        orientation(p1, p2, q2)
+    ]
 
+    const orientationP1 = orientations[0]!;
+    const orientationP2 = orientations[1]!;
+    const orientationQ1 = orientations[2]!;
+    const orientationQ2 = orientations[3]!;
+
+    // return orientations.filter(o => o === 'straight').length === 0;
+    const straights = orientations.filter(o => o === 'straight');
+    const isPerpendicular = straights.length >= 1 && straights.length <= 3;
+    const isColinear = straights.length === 4;
+
+    if (isColinear) {
+        // make sure candidate segment [p1,p2] is contained in target segment [q1, q2]
+        return !onSegment(q1, q2, p1) || !onSegment(q1, q2, p2);
+    }
+    
     // P1 and P2 are on different sides of segment [Q1, Q2] AND
     // Q1 and Q2 are on different sides of segment [P1, P2]
     if (orientationP1 !== orientationP2 && orientationQ1 !== orientationQ2) {
+        if (!isPerpendicular || (isPerpendicular && !onSegment(p1, p2, q1) && !onSegment(p1, p2, q2) && !onSegment(q1, q2, p1) && !onSegment(q1, q2, p2)))
         return true;
     }
 
@@ -41,6 +59,23 @@ export function onSegment(segmentP1: IVec2, segmentP2: IVec2, point: IVec2): boo
     point.y <= Math.max(segmentP1.y, segmentP2.y) &&
     point.y >= Math.min(segmentP1.y, segmentP2.y)
   );
+}
+
+export function segmentIsInsidePolygon(segmentA: IVec2, segmentB: IVec2, polygon: IPolygon) {
+    let intersects = false;
+    for (let i = 0; i < polygon.vertices.length; i++) {
+        const q1 = polygon.vertices[i]!;
+        const q2 = i === (polygon.vertices.length - 1) 
+        ? polygon.vertices[0]! // wrap around
+        : polygon.vertices[i + 1]!
+        
+        intersects = segmentsIntersect(segmentA, segmentB, q1, q2);
+        if (intersects) {
+            break;
+        }
+    }
+
+    return !intersects;
 }
 
 export function isInside(point: IVec2, polygon: IPolygon, endX = 1000000) {

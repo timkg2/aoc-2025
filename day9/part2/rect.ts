@@ -1,5 +1,5 @@
 import type { IPolygon, IVec2 } from "./index.ts";
-import { isInside } from "./intersection.ts";
+import { isInside, segmentIsInsidePolygon } from "./intersection.ts";
 
 export class Rectangle implements IPolygon {
 
@@ -50,10 +50,10 @@ export class Rectangle implements IPolygon {
     }
 
     isInside(polygon: IPolygon) {
-        return isInside(this.topLeft, polygon)
-               && isInside(this.topRight, polygon)
-               && isInside(this.bottomRight, polygon)
-               && isInside(this.bottomLeft, polygon);
+        return segmentIsInsidePolygon(this.topLeft, this.topRight, polygon)
+            && segmentIsInsidePolygon(this.topRight, this.bottomRight, polygon)
+            && segmentIsInsidePolygon(this.bottomRight, this.bottomLeft, polygon)
+            && segmentIsInsidePolygon(this.bottomLeft, this.topLeft, polygon)
     }
 }
 
